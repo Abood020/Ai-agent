@@ -4,14 +4,14 @@ This project is a simple Library Desk Agent built using FastAPI, LangChain, and 
 
 ---
 
-## Project Structure
+### Project Structure
 
+```
 library-agent/
-│
-├── app/                     # Streamlit frontend
+├── app/                        # Streamlit frontend
 │   └── streamlit_app.py
 │
-├── server/                  # Backend (API + agent + tools)
+├── server/                     # Backend (API + agent + tools)
 │   ├── agent.py
 │   ├── main.py
 │   ├── db.py
@@ -20,18 +20,18 @@ library-agent/
 │   ├── tools.py
 │   └── requirements.txt
 │
-├── db/
-│   ├── schema.sql           # Database schema (tables)
-│   └── seed.sql             # Initial seed data
+├── db/                         # Database scripts
+│   ├── schema.sql              # Database schema (tables)
+│   └── seed.sql                # Initial seed data
 │
 ├── prompts/
-│   └── system_prompt.txt    # Agent system prompt
+│   └── system_prompt.txt       # Agent system prompt
 │
-├── .env.example             # Example environment variables
-├── library.db               # SQLite database
+├── .env.example                # Example environment variables
+├── library.db                  # SQLite database
 └── README.md
+```
 
----
 
 ## Requirements
 
