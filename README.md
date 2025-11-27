@@ -1,57 +1,92 @@
 # Library Desk Agent
 
-This project implements a simple Library Desk Agent as part of a training and submission task.
-The idea is to provide a virtual assistant for library staff that can:
-
-* Answer questions about books (search by title or author)
-* Create orders for specific customers
-* Restock books
-* Update book prices
-* Retrieve the status of an existing order
-* Generate reports for low-stock books
-
-The agent does not hallucinate or assume database changes. All operations must be executed through defined tools that interact directly with the database.
+This project is a simple Library Desk Agent built using FastAPI, LangChain, and Streamlit. The agent can interact with a real SQLite database through dedicated tools that handle searching books, creating orders, updating stock, modifying prices, checking order status, and generating inventory summaries. All operations are done through actual tool calls—no hallucinated actions.
 
 ---
 
 ## Project Structure
 
-The project is organized into three main parts:
-
-* `app/` – Streamlit frontend UI
-* `server/` – FastAPI backend, agent logic, tools, and business operations
-* `db/` – SQL scripts for creating and seeding the SQLite database (`schema.sql` and `seed.sql`)
-
-Additionally, the root directory includes:
-
-* `library.db` – SQLite database generated after running migrations/seed
-* `.env.example` – Environment variable template (OpenAI key, database path, model provider, etc.)
-* `.gitignore` – Excludes virtual environments, compiled files, and other unneeded artifacts
+library-agent/
+│
+├── app/                     # Streamlit frontend
+│   └── streamlit_app.py
+│
+├── server/                  # Backend (API + agent + tools)
+│   ├── agent.py
+│   ├── main.py
+│   ├── db.py
+│   ├── db_messages.py
+│   ├── config.py
+│   ├── tools.py
+│   └── requirements.txt
+│
+├── db/
+│   ├── schema.sql           # Database schema (tables)
+│   └── seed.sql             # Initial seed data
+│
+├── prompts/
+│   └── system_prompt.txt    # Agent system prompt
+│
+├── .env.example             # Example environment variables
+├── library.db               # SQLite database
+└── README.md
 
 ---
 
-## Directory Layout
+## Requirements
 
-```bash
-library-agent/
-├── app/
-│   └── streamlit_app.py       
-│
-├── db/
-│   ├── schema.sql             
-│   └── seed.sql                
-│
-├── server/
-│   ├── agent.py                
-│   ├── config.py               
-│   ├── db.py                   
-│   ├── db_messages.py          
-│   ├── main.py                
-│   ├── requirements.txt        
-│   └── tools.py                
-│
-├── .env.example                
-├── .gitignore                  
-├── library.db                  
-└── README.md
+- Python 3.10+
+- SQLite3
+- OpenAI API key
 
+---
+
+## Setup Instructions
+
+1. Create a virtual environment:
+
+   Windows:
+   python -m venv venv
+   venv\Scripts\activate
+
+   macOS / Linux:
+   python3 -m venv venv
+   source venv/bin/activate
+
+2. Install backend dependencies:
+
+   cd server
+   pip install -r requirements.txt
+
+3. Prepare the database:
+
+   cd db
+   sqlite3 ../library.db < schema.sql
+   sqlite3 ../library.db < seed.sql
+
+4. Create your environment file:
+
+   cp .env.example .env
+   Add your OPENAI_API_KEY inside the file.
+
+5. Run the FastAPI backend:
+
+   cd server
+   uvicorn main:app --reload --host 127.0.0.1 --port 8001
+
+   API docs:
+   http://127.0.0.1:8001/docs
+
+6. Run the Streamlit frontend:
+
+   cd app
+   streamlit run streamlit_app.py
+
+---
+
+## Notes
+
+- All database writes are performed through LangChain tools.
+- All tool calls and assistant messages are logged in tables `messages` and `tool_calls`.
+- The project structure matches the required deliverables exactly.
+- The repository includes schema + seed, prompts, frontend, backend, and environment example.
